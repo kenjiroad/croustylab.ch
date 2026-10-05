@@ -18,17 +18,42 @@
   if (capture) { html.classList.add('capture'); if (ok) gsap.globalTimeline.timeScale(25); }
 
   /* ---------- vidéos : on ne lance que si le mouvement est accepté, et seulement à l'écran ---------- */
-  var videos = document.querySelectorAll('video');
-  if (!rm && 'IntersectionObserver' in window) {
+  /* iPhone : la vidéo doit être muette et « inline » AVANT play(). Si l'autoplay est refusé
+     (mode économie d'énergie, aperçu dans une iframe), le poster reste affiché et on relance
+     la lecture au premier geste de l'utilisateur. */
+  var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
+  var visibles = [];
+  function jouer(v) {
+    v.muted = true; v.defaultMuted = true; v.playsInline = true;
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { attendreGeste(); });
+  }
+  var enAttente = false;
+  function attendreGeste() {
+    if (enAttente) return; enAttente = true;
+    var relance = function () {
+      enAttente = false;
+      ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(function (t) { window.removeEventListener(t, relance, true); });
+      visibles.forEach(jouer);
+    };
+    ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(function (t) { window.addEventListener(t, relance, { capture: true, passive: true }); });
+  }
+  if (rm) {
+    videos.forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  } else if ('IntersectionObserver' in window) {
     videos.forEach(function (v) {
       var io = new IntersectionObserver(function (es) {
         es.forEach(function (e) {
-          if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-          else v.pause();
+          var i = visibles.indexOf(v);
+          if (e.isIntersecting) { if (i < 0) visibles.push(v); jouer(v); }
+          else { if (i >= 0) visibles.splice(i, 1); v.pause(); }
         });
-      }, { rootMargin: '120px' });
+      }, { rootMargin: '120px 0px', threshold: 0 });
       io.observe(v);
     });
+  } else {
+    videos.forEach(jouer);
   }
 
   /* ---------- navigation : transparente sur le hero, noire ensuite ---------- */
@@ -175,10 +200,7 @@
   gsap.utils.toArray('.count').forEach(function (el) {
     var to = parseFloat(el.getAttribute('data-to'));
     if (isNaN(to)) return;
-    if (to === 0) {
-      gsap.from(el, { scale: 1.3, autoAlpha: 0, duration: .6, ease: 'back.out(2)', transformOrigin: 'left bottom', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-      return;
-    }
+    if (to === 0) return; // un zéro ne compte pas : il reste affiché tel quel
     var o = { v: 0 };
     gsap.to(o, {
       v: to, duration: 1.3, ease: 'power3.out', snap: { v: 1 },
@@ -215,6 +237,9 @@
     li.appendChild(s);
   });
   if (lis.length) gsap.from('.ingr li span', { yPercent: 110, duration: .7, stagger: .09, ease: 'power4.out', scrollTrigger: { trigger: '.ingr', start: 'top 85%', once: true } });
+
+  /* Les images et le plan se chargent après coup : on recalcule les déclencheurs une fois la page complète. */
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
   /* ---------- mode capture (contrôle visuel en headless) : ?capture=1&y=1800
      Chrome headless ne tient pas un vrai défilement : on décale la page d'une marge négative
