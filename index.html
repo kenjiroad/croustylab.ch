@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Crousty Lab · Le crousty à Genève — Rue de Lyon 14, à 5 min de Cornavin</title>
+<title>Crousty Lab, le crousty à Genève | Rue de Lyon 14, à 5 min de Cornavin</title>
 <meta name="description" content="Le crousty à Genève, à 5 minutes de la gare Cornavin : riz vapeur, poulet croustillant halal, sauce blanche signature, oignons crispy. Quatre références à 12 CHF, XL à 17 avec deux fois le poulet. À emporter, Rue de Lyon 14.">
 
 <link rel="canonical" href="https://croustylab.ch/">
@@ -18,18 +18,20 @@
 <meta property="og:type" content="restaurant.restaurant">
 <meta property="og:locale" content="fr_CH">
 <meta property="og:site_name" content="Crousty Lab">
-<meta property="og:title" content="Crousty Lab · Le crousty à Genève, à 5 min de Cornavin">
+<meta property="og:title" content="Crousty Lab, le crousty à Genève, à 5 min de Cornavin">
 <meta property="og:description" content="Riz vapeur, poulet croustillant halal, sauce blanche signature, oignons crispy. Quatre références à 12 CHF, XL à 17 avec deux fois le poulet. À emporter, Rue de Lyon 14, Genève.">
 <meta property="og:url" content="https://croustylab.ch/">
 <meta property="og:image" content="https://croustylab.ch/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="img/crousty-lab-orange.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="og-image.png">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 
 <link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/chivo-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="img/hero-loop-poster.webp" as="image" type="image/webp">
+<link rel="preload" href="img/hero-montage-poster.webp" as="image" type="image/webp" media="(min-width: 768px)">
+<link rel="preload" href="img/hero-montage-poster-mobile.webp" as="image" type="image/webp" media="(max-width: 767px)">
 <link rel="preload" href="img/crousty-lab-blanc.svg" as="image" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 <script>
@@ -44,7 +46,8 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
 
 <header class="nav nav--top" id="top">
   <a class="nav-logo tip" href="#top" data-tip="C'est nous qui avons croqué le Y." aria-label="Crousty Lab, retour en haut de page">
-    <img src="img/crousty-lab-blanc.svg" alt="" width="120" height="81">
+    <img class="logo-blanc" src="img/crousty-lab-blanc.svg" alt="" width="120" height="81">
+    <img class="logo-orange" src="img/crousty-lab-orange.svg" alt="" width="120" height="81">
   </a>
   <nav class="nav-links" aria-label="Sections de la page">
     <a href="#carte">La carte</a>
@@ -56,11 +59,12 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
 
 <main>
 
-<!-- ═══════════════════════ HERO — le produit d'abord ═══════════════════════ -->
+<!-- ═══════════════════════ HERO : le produit d'abord ═══════════════════════ -->
 <section class="hero" aria-label="Crousty Lab, le crousty à Genève">
   <div class="hero-media">
-    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="img/hero-loop-poster.webp" width="1280" height="720" aria-hidden="true" tabindex="-1">
-      <source src="img/hero-loop.mp4" type="video/mp4">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="img/hero-montage-poster.webp" data-poster-mobile="img/hero-montage-poster-mobile.webp" aria-hidden="true" tabindex="-1">
+      <source src="img/hero-montage-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
+      <source src="img/hero-montage.mp4" type="video/mp4">
     </video>
   </div>
   <div class="hero-copy">
@@ -69,51 +73,37 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
       <span class="hero-line hero-a">Trouve quelque chose de +&nbsp;crousssty que ça.</span>
       <span class="hero-sub hero-a">Le crousty à Genève&nbsp;: riz vapeur, poulet croustillant halal, sauce blanche signature, oignons crispy.</span>
     </h1>
-    <p class="hero-prix hero-a"><span class="tip" data-tip="Oui, tout.">12&nbsp;CHF · XL 17&nbsp;CHF</span></p>
+    <p class="hero-prix hero-a"><span class="tip" data-tip="Oui, tout.">12&nbsp;CHF, XL&nbsp;17&nbsp;CHF</span></p>
     <div class="hero-cta hero-a">
       <a class="btn btn-blanc" href="#venir">Venir le chercher</a>
       <a class="btn btn-ghost" href="#carte">Voir la carte</a>
     </div>
   </div>
   <p class="hero-hint hero-a" aria-hidden="true">Descends. Ça croustille plus bas.</p>
-  <div class="miettes" aria-hidden="true"></div>
+  <button class="hero-pause hero-a" type="button" aria-pressed="false" aria-label="Mettre la vidéo en pause"><span aria-hidden="true"></span></button>
 </section>
 
-<!-- ═══════════════════════ SLOGAN ═══════════════════════ -->
-<div class="marquee" aria-label="Trouve quelque chose de plus crousssty que ça. Crac, puis la sauce. Rue de Lyon 14, Genève.">
-  <div class="marquee-track">
-    <span class="marquee-item">Trouve quelque chose de +&nbsp;crousssty que ça.</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Crac. Puis la sauce.</span><span class="marquee-dot"></span>
-    <span class="marquee-item">Rue de Lyon&nbsp;14, Genève.</span><span class="marquee-dot"></span>
-    <span class="marquee-item" aria-hidden="true">Trouve quelque chose de +&nbsp;crousssty que ça.</span><span class="marquee-dot" aria-hidden="true"></span>
-    <span class="marquee-item" aria-hidden="true">Crac. Puis la sauce.</span><span class="marquee-dot" aria-hidden="true"></span>
-    <span class="marquee-item" aria-hidden="true">Rue de Lyon&nbsp;14, Genève.</span><span class="marquee-dot" aria-hidden="true"></span>
-  </div>
-</div>
 
-<!-- ═══════════════════════ MANIFESTE — le produit, et l'envie de revenir ═══════════════════════ -->
+<!-- ═══════════════════════ MANIFESTE : le produit, et l'envie de revenir ═══════════════════════ -->
 <section id="manifeste" class="manifeste">
   <div class="wrap manif-grid">
     <div class="manif-copy">
       <h2 class="t-sec">Croustillant dehors. Généreux dedans.</h2>
       <p class="lead">Un crousty se juge au premier croc. Et à la deuxième visite.</p>
       <div class="manif-txt">
-        <p>Le riz est vapeur. Le poulet est pané, croustillant, halal — et il y en a. La sauce blanche est la nôtre, froide sur le poulet chaud. Les oignons crispy finissent le travail. Quatre références, pas quarante&nbsp;: on ne rallonge pas la carte, on règle la recette.</p>
-        <p>Le XL double la portion de poulet dans la même boîte. La 03 végétale a la même panure, sa friteuse dédiée et le même soin. Et la barquette est fermée en 45 secondes, parce que tu as faim maintenant.</p>
+        <p>Le riz est vapeur. Le poulet est pané, croustillant, halal, et il y en a. La sauce blanche est la nôtre, froide sur le poulet chaud. Les oignons crispy finissent le travail. Quatre références, pas quarante&nbsp;: on ne rallonge pas la carte, on règle la recette.</p>
+        <p>Le XL double la portion de poulet dans la même boîte. La 03 Veggie a la même panure, sa friteuse dédiée et le même soin.</p>
         <p>C'est ça, le Lab. Pas un concept. Une barquette que tu reprends demain, et le jour d'après.</p>
         <p class="manif-slogan">Trouve quelque chose de +&nbsp;crousssty que ça.</p>
       </div>
     </div>
-    <ul class="compteurs" aria-label="Les chiffres du Lab">
-      <li><span class="count" data-to="4">4</span><span class="compteur-lab">références, pas quarante</span></li>
-      <li><span class="count" data-to="1">1</span><span class="compteur-lab">sauce blanche signature. La nôtre.</span></li>
-      <li><span class="count" data-to="140">140</span><span class="compteur-lab">grammes de poulet croustillant. 280 en XL.</span></li>
-      <li><span class="count" data-to="45">45</span><span class="compteur-lab">secondes pour fermer la barquette</span></li>
-    </ul>
+    <figure class="manif-fig">
+      <img src="img/gen-montage-45s.webp" width="1344" height="752" loading="lazy" alt="La sauce blanche est posée sur le poulet croustillant, la barquette est montée au comptoir">
+    </figure>
   </div>
 </section>
 
-<!-- ═══════════════════════ LA CARTE — le plat ═══════════════════════ -->
+<!-- ═══════════════════════ LA CARTE : le plat ═══════════════════════ -->
 <section id="carte" class="carte">
   <div class="wrap">
     <h2 class="t-sec">Quatre. Pas quarante.</h2>
@@ -128,29 +118,33 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
         <li class="ref is-active" data-ref="01" id="ref-01">
           <figure class="ref-fig"><img src="img/ref-01-tenders-800.webp" srcset="img/ref-01-tenders-800.webp 800w, img/ref-01-tenders.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 01 Tenders : riz vapeur, tenders panés, sauce blanche, oignons crispy, vue de dessus sur fond orange"></figure>
           <span class="ref-num" aria-hidden="true">01</span>
-          <h3 class="ref-nom"><span class="sr">Référence 01 — </span>Tenders</h3>
-          <p class="ref-desc">Riz vapeur, sauce blanche signature, tenders panés, oignons crispy, persil. Le crousty tel qu'il est né. <b>12&nbsp;CHF · XL 17.</b></p>
+          <h3 class="ref-nom"><span class="sr">Référence 01, </span>Tenders</h3>
+          <p class="ref-desc">Riz vapeur, sauce blanche signature, tenders panés, oignons crispy, persil. Le crousty tel qu'il est né.</p>
+          <p class="ref-prix"><span>12&nbsp;CHF</span><span>XL&nbsp;17&nbsp;CHF</span></p>
           <p class="ref-hover" aria-hidden="true">Le classique.</p>
         </li>
         <li class="ref" data-ref="02" id="ref-02">
           <figure class="ref-fig"><img src="img/ref-02-cordon-bleu-800.webp" srcset="img/ref-02-cordon-bleu-800.webp 800w, img/ref-02-cordon-bleu.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 02 Cordon Bleu : riz vapeur, cordon bleu tranché à cœur fondant, sauce blanche, oignons crispy"></figure>
           <span class="ref-num" aria-hidden="true">02</span>
-          <h3 class="ref-nom"><span class="sr">Référence 02 — </span>Cordon Bleu</h3>
-          <p class="ref-desc">Riz vapeur, sauce blanche signature, cordon bleu tranché à cœur fondant, oignons crispy, persil. Le fromage coule à la découpe. <b>12&nbsp;CHF · XL 17 (deux pièces).</b></p>
+          <h3 class="ref-nom"><span class="sr">Référence 02, </span>Cordon Bleu</h3>
+          <p class="ref-desc">Riz vapeur, sauce blanche signature, cordon bleu tranché à cœur fondant, oignons crispy, persil. Le fromage coule à la découpe.</p>
+          <p class="ref-prix"><span>12&nbsp;CHF</span><span>XL&nbsp;17&nbsp;CHF, deux pièces</span></p>
           <p class="ref-hover" aria-hidden="true">Ça coule.</p>
         </li>
         <li class="ref" data-ref="03" id="ref-03">
-          <figure class="ref-fig"><img src="img/ref-03-vegetale-800.webp" srcset="img/ref-03-vegetale-800.webp 800w, img/ref-03-vegetale.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 03 Végétale : riz vapeur, tofu pané maison, sauce blanche végétale, oignons crispy"></figure>
+          <figure class="ref-fig"><img src="img/ref-03-vegetale-800.webp" srcset="img/ref-03-vegetale-800.webp 800w, img/ref-03-vegetale.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 03 Veggie : riz vapeur, tofu pané maison, sauce blanche végétale, oignons crispy"></figure>
           <span class="ref-num" aria-hidden="true">03</span>
-          <h3 class="ref-nom"><span class="sr">Référence 03 — </span>Végétale</h3>
-          <p class="ref-desc">Riz vapeur, sauce blanche végétale, tofu pané maison, oignons crispy. Même panure, friteuse dédiée, même prix que les trois autres — ce n'est pas une option, c'est une référence. <b>12&nbsp;CHF · XL 17.</b></p>
+          <h3 class="ref-nom"><span class="sr">Référence 03, </span>Veggie</h3>
+          <p class="ref-desc">Riz vapeur, sauce blanche végétale, tofu pané maison, oignons crispy, persil. Même panure, friteuse dédiée, même prix que les trois autres. Ce n'est pas une option, c'est une référence.</p>
+          <p class="ref-prix"><span>12&nbsp;CHF</span><span>XL&nbsp;17&nbsp;CHF</span></p>
           <p class="ref-hover" aria-hidden="true">Même crac.</p>
         </li>
         <li class="ref" data-ref="04" id="ref-04">
-          <figure class="ref-fig"><img src="img/ref-04-curry-800.webp" srcset="img/ref-04-curry-800.webp 800w, img/ref-04-curry.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 04 Curry Maison : riz vapeur, poulet croustillant, sauce curry maison, coriandre, citron vert, oignons crispy"></figure>
+          <figure class="ref-fig"><img src="img/ref-04-curry-800.webp" srcset="img/ref-04-curry-800.webp 800w, img/ref-04-curry.webp 1600w" sizes="(min-width: 960px) 0px, 100vw" width="800" height="597" loading="lazy" alt="Barquette 04 Curry Maison : riz vapeur, poulet croustillant, sauce curry maison, oignons crispy, persil"></figure>
           <span class="ref-num" aria-hidden="true">04</span>
-          <h3 class="ref-nom"><span class="sr">Référence 04 — </span>Curry Maison</h3>
-          <p class="ref-desc">Riz vapeur, sauce curry maison, poulet croustillant, oignons crispy, coriandre, citron vert. La sauce curry est faite ici&nbsp;: douce, pas timide. <b>12&nbsp;CHF · XL 17.</b></p>
+          <h3 class="ref-nom"><span class="sr">Référence 04, </span>Curry Maison</h3>
+          <p class="ref-desc">Riz vapeur, sauce curry maison, poulet croustillant, oignons crispy, persil. La sauce curry est faite ici&nbsp;: douce, pas timide.</p>
+          <p class="ref-prix"><span>12&nbsp;CHF</span><span>XL&nbsp;17&nbsp;CHF</span></p>
           <p class="ref-hover" aria-hidden="true">Ça réchauffe.</p>
         </li>
       </ol>
@@ -161,13 +155,14 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
           <img class="stack-img" data-ref="02" src="img/ref-02-cordon-bleu.webp" width="1600" height="1194" loading="lazy" alt="">
           <img class="stack-img" data-ref="03" src="img/ref-03-vegetale.webp" width="1600" height="1194" loading="lazy" alt="">
           <img class="stack-img" data-ref="04" src="img/ref-04-curry.webp" width="1600" height="1194" loading="lazy" alt="">
+          <span class="stack-num" data-num>01</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ XL — deux fois le poulet ═══════════════════════ -->
+<!-- ═══════════════════════ XL : deux fois le poulet ═══════════════════════ -->
 <section id="xl" class="xl">
   <div class="wrap xl-grid">
     <div class="xl-copy">
@@ -177,12 +172,13 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
       <div class="xl-switch" role="group" aria-label="Choisir la taille de la barquette">
         <button type="button" class="xl-btn is-on" aria-pressed="true" data-size="std">Standard</button>
         <button type="button" class="xl-btn tip" aria-pressed="false" data-size="xl" data-tip="Deux fois le poulet. Même boîte.">XL</button>
+        <span class="xl-curseur" aria-hidden="true"></span>
       </div>
 
       <p class="xl-num" aria-live="polite"><span class="xl-count">12</span><span class="u">CHF</span></p>
 
-      <p class="xl-cap is-on" data-size="std"><b>Standard — 140&nbsp;g de poulet croustillant</b> sur le riz vapeur, la sauce blanche et les oignons crispy. 12&nbsp;CHF.</p>
-      <p class="xl-cap" data-size="xl"><b>XL — 280&nbsp;g de poulet croustillant</b>, la portion doublée dans la même boîte. 17&nbsp;CHF.</p>
+      <p class="xl-cap is-on" data-size="std"><b>Standard : 140&nbsp;g de poulet croustillant</b> sur le riz vapeur, la sauce blanche et les oignons crispy. 12&nbsp;CHF.</p>
+      <p class="xl-cap" data-size="xl"><b>XL : 280&nbsp;g de poulet croustillant</b>, la portion doublée dans la même boîte. 17&nbsp;CHF.</p>
 
       <p class="xl-note">Même boîte, même riz, même sauce. Deux fois le poulet. Pour les soirs où tu as vraiment faim.</p>
     </div>
@@ -192,14 +188,14 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
         <figcaption>Standard, 12&nbsp;CHF</figcaption>
       </figure>
       <figure class="xl-fig" data-size="xl">
-        <img src="img/gen-xl-ref.webp" width="1168" height="880" loading="lazy" alt="Barquette XL : la même barquette avec deux fois plus de poulet croustillant, qui déborde">
+        <img src="img/ref-01-tenders-xl.webp" width="1600" height="1200" loading="lazy" alt="Barquette XL : la même barquette avec deux fois plus de poulet croustillant">
         <figcaption>XL, 17&nbsp;CHF</figcaption>
       </figure>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════ UN CROUSTY, C'EST ÇA — « Crac. », la sauce, la FAQ ═══════════════════════ -->
+<!-- ═══════════════════════ UN CROUSTY, C'EST ÇA : « Crac. », la sauce, la FAQ ═══════════════════════ -->
 <section id="crousty" class="quoi">
   <div class="wrap">
     <p class="crac" aria-hidden="true"><span class="crac-l">Cr</span><span class="crac-r">ac.</span></p>
@@ -210,7 +206,7 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
       <video class="quoi-video" muted loop playsinline preload="metadata" poster="img/macro-loop-poster.webp" width="960" height="540" aria-hidden="true" tabindex="-1">
         <source src="img/macro-loop.mp4" type="video/mp4">
       </video>
-      <img class="quoi-burst" src="img/gen-burst-noir.webp" width="688" height="1024" loading="lazy" alt="Un tender croustillant déchiré en deux, la panure qui éclate, sur fond noir">
+      <img class="quoi-burst" src="img/gen-tender-mordu.webp" width="1024" height="1024" loading="lazy" alt="Un tender croustillant croqué, la panure qui s'effrite, sur fond orange">
     </div>
     <div class="quoi-copy">
       <h2 class="t-sec">Un crousty, c'est ça.</h2>
@@ -220,7 +216,7 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
         <li>Sauce blanche signature.</li>
         <li>Oignons crispy.</li>
       </ul>
-      <p>Né en France en 2012. Une barquette de riz vapeur recouverte de poulet pané croustillant, de sauce blanche et d'oignons crispy. Chez Crousty Lab, le poulet est halal, la sauce blanche est la nôtre et la barquette se ferme en 45 secondes. À emporter, <b>Rue de Lyon&nbsp;14</b>, quartier des Grottes, à cinq minutes à pied de la gare Cornavin.</p>
+      <p>Né en France en 2012. Une barquette de riz vapeur recouverte de poulet pané croustillant, de sauce blanche et d'oignons crispy. Chez Crousty Lab, le poulet est halal et la sauce blanche est la nôtre. À emporter, <b>Rue de Lyon&nbsp;14</b>, quartier des Grottes, à cinq minutes à pied de la gare Cornavin.</p>
     </div>
   </div>
 
@@ -268,17 +264,16 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
 <section id="halal" class="faits">
   <div class="wrap">
     <article class="fait">
-      <p class="fait-num"><span class="count" data-to="100">100</span><span class="fait-pct">%</span><span class="fait-unit">halal</span></p>
       <div class="fait-txt">
         <h2 class="t-sec t-fait">Le poulet est halal.</h2>
-        <p>Tout le poulet, toute la carte, tous les jours. Le certificat est au comptoir. Et la 03 végétale a la même panure, sa friteuse dédiée et le même prix.</p>
+        <p>Tout le poulet, toute la carte, tous les jours. Le certificat est au comptoir. Et la 03 Veggie a la même panure, sa friteuse dédiée et le même prix.</p>
       </div>
       <figure class="fait-fig"><img src="img/gen-main-barquette.webp" width="896" height="1120" loading="lazy" alt="Deux mains tiennent une barquette ouverte de crousty, vue de dessus sur fond orange"></figure>
     </article>
   </div>
 </section>
 
-<!-- ═══════════════════════ OÙ NOUS TROUVER — l'adresse ═══════════════════════ -->
+<!-- ═══════════════════════ OÙ NOUS TROUVER : l'adresse ═══════════════════════ -->
 <section id="venir" class="venir">
   <div class="wrap">
     <h2 class="t-sec t-adresse">Rue de Lyon&nbsp;14.</h2>
@@ -292,53 +287,45 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
           1201 Genève
         </address>
         <div class="venir-cta">
-          <a class="btn btn-noir" href="https://www.google.com/maps/search/?api=1&query=Crousty+Lab+Rue+de+Lyon+14+1201+Gen%C3%A8ve" target="_blank" rel="noopener">Itinéraire — 5 min de Cornavin</a>
+          <a class="btn btn-noir" href="https://www.google.com/maps/search/?api=1&query=Crousty+Lab+Rue+de+Lyon+14+1201+Gen%C3%A8ve" target="_blank" rel="noopener">Itinéraire</a>
           <a class="btn btn-ghost-noir" href="tel:+41223142227">Appeler le 022 314 22 27</a>
         </div>
 
-        <h3 class="horaires-t">Ouvert jusqu'à minuit le week-end.</h3>
+        <h3 class="horaires-t">Midi et soir en semaine, non-stop le week-end.</h3>
         <p class="etat" data-etat aria-live="polite"></p>
         <table class="hr">
           <caption class="sr">Horaires d'ouverture</caption>
-          <tr><th scope="row">Lundi – jeudi</th><td>11:00 – 22:00</td></tr>
-          <tr><th scope="row">Vendredi – samedi</th><td>11:00 – 00:00</td></tr>
-          <tr><th scope="row">Dimanche</th><td>11:00 – 22:00</td></tr>
+          <tr><th scope="row">Lundi à vendredi</th><td>11h à 14h30<br>18h à 22h</td></tr>
+          <tr><th scope="row">Samedi et dimanche</th><td>12h à 21h</td></tr>
         </table>
         <p class="venir-note">À emporter. TWINT, carte et espèces. Poulet halal.</p>
       </div>
 
-      <div class="venir-map">
-        <iframe loading="lazy" title="Plan d'accès à Crousty Lab, Rue de Lyon 14, 1201 Genève" src="https://www.google.com/maps?q=46.20897,6.13729&z=16&hl=fr&output=embed" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-      </div>
+      <figure class="venir-photo">
+        <img src="img/facade.webp" width="1200" height="1600" loading="lazy" alt="Une barquette de crousty tenue à la main le soir, devant la devanture de Crousty Lab et son enseigne orange allumée, Rue de Lyon 14 à Genève">
+        <figcaption>Rue de Lyon&nbsp;14, entre la place des Grottes et la gare.</figcaption>
+      </figure>
     </div>
-
-    <figure class="facade">
-      <img src="img/facade.webp" width="1200" height="1607" loading="lazy" alt="La devanture de Crousty Lab, Rue de Lyon 14 à Genève, avec l'enseigne orange">
-      <figcaption>Rue de Lyon&nbsp;14, entre la place des Grottes et la gare.</figcaption>
-    </figure>
   </div>
 </section>
 
-<!-- ═══════════════════════ AVIS ═══════════════════════ -->
-<section id="avis" class="avis">
-  <div class="wrap">
-    <h2 class="t-sec">C'était crousssty&nbsp;? Dis-le.</h2>
-    <p class="lead">Trente secondes sur Google. Ça nous fait exister.</p>
-    <p class="avis-zero"><span class="count" data-to="0">0</span> avis. On vient d'ouvrir. Sois le premier.</p>
-    <a class="btn btn-blanc" href="https://www.google.com/maps/search/?api=1&query=Crousty+Lab+Rue+de+Lyon+14+1201+Gen%C3%A8ve" target="_blank" rel="noopener">Laisser un avis — 30 secondes</a>
-  </div>
-</section>
-
-<!-- ═══════════════════════ RÉSEAUX ═══════════════════════ -->
-<section id="reseaux" class="reseaux">
-  <div class="wrap">
-    <h2 class="t-sec">Montre ton crousty.</h2>
-    <a class="handle" href="https://www.instagram.com/thecroustylab" rel="noopener" target="_blank">@thecroustylab</a>
-    <p class="lead">Instagram et TikTok. #croustygeneve</p>
-    <p class="reseaux-links">
-      <a class="btn btn-orange" href="https://www.instagram.com/thecroustylab" rel="noopener" target="_blank">Suivre sur Instagram</a>
-      <a class="btn btn-orange" href="https://www.tiktok.com/@thecroustylab" rel="noopener" target="_blank">Suivre sur TikTok</a>
-    </p>
+<!-- ═══════════════════════ APRÈS LA BARQUETTE : l'avis et les réseaux ═══════════════════════ -->
+<section id="avis" class="apres">
+  <div class="wrap apres-grid">
+    <div class="apres-col">
+      <h2 class="t-sec">C'était crousssty&nbsp;? Dis-le.</h2>
+      <p class="lead">Trente secondes sur Google. Ça nous fait exister. On vient d'ouvrir&nbsp;: sois le premier.</p>
+      <a class="btn btn-orange" href="https://www.google.com/maps/search/?api=1&query=Crousty+Lab+Rue+de+Lyon+14+1201+Gen%C3%A8ve" target="_blank" rel="noopener">Laisser un avis</a>
+    </div>
+    <div class="apres-col" id="reseaux">
+      <h2 class="t-sec">Montre ton crousty.</h2>
+      <a class="handle" href="https://www.instagram.com/croustylab.geneve" rel="noopener" target="_blank">@croustylab.geneve</a>
+      <p class="lead">Sur Instagram et TikTok, avec #croustygeneve.</p>
+      <p class="reseaux-links">
+        <a class="btn btn-contour" href="https://www.instagram.com/croustylab.geneve" rel="noopener" target="_blank">Instagram</a>
+        <a class="btn btn-contour" href="https://www.tiktok.com/@croustylab.geneve" rel="noopener" target="_blank">TikTok</a>
+      </p>
+    </div>
   </div>
 </section>
 
@@ -361,11 +348,11 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
     </div>
     <div class="pied-col">
       <p class="pied-t">Horaires</p>
-      <p>Lundi – jeudi 11:00 – 22:00<br>Vendredi – samedi 11:00 – 00:00<br>Dimanche 11:00 – 22:00</p>
+      <p>Lundi à vendredi, 11h à 14h30 et 18h à 22h<br>Samedi et dimanche, 12h à 21h</p>
     </div>
     <div class="pied-col">
       <p class="pied-t">Suivre</p>
-      <p><a href="https://www.instagram.com/thecroustylab" rel="noopener" target="_blank">Instagram</a><br><a href="https://www.tiktok.com/@thecroustylab" rel="noopener" target="_blank">TikTok</a></p>
+      <p><a href="https://www.instagram.com/croustylab.geneve" rel="noopener" target="_blank">Instagram</a><br><a href="https://www.tiktok.com/@croustylab.geneve" rel="noopener" target="_blank">TikTok</a></p>
     </div>
     <div class="pied-col">
       <p class="pied-t">La page</p>
@@ -373,14 +360,14 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
     </div>
   </div>
   <div class="wrap">
-    <p class="mentions">Crousty Lab · Rue de Lyon 14, 1201 Genève · Crousty à emporter à Genève · Poulet halal</p>
+    <p class="mentions">Crousty Lab, Rue de Lyon 14, 1201 Genève. Crousty à emporter, poulet halal.</p>
   </div>
 </footer>
 
 <a class="barre" href="#venir" aria-label="Rue de Lyon 14, voir l'adresse et les horaires">
   <span class="barre-adr">Rue de Lyon&nbsp;14</span>
   <span class="barre-sep" aria-hidden="true"></span>
-  <span class="barre-etat" data-etat-court>11 h – 22 h</span>
+  <span class="barre-etat" data-etat-court>Midi et soir</span>
 </a>
 
 <script type="application/ld+json">
@@ -409,13 +396,14 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
   "geo": { "@type": "GeoCoordinates", "latitude": 46.20897, "longitude": 6.13729 },
   "hasMap": "https://www.google.com/maps/search/?api=1&query=Crousty+Lab+Rue+de+Lyon+14+1201+Gen%C3%A8ve",
   "openingHoursSpecification": [
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Sunday"], "opens": "11:00", "closes": "22:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday","Saturday"], "opens": "11:00", "closes": "00:00" }
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "11:00", "closes": "14:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "18:00", "closes": "22:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday","Sunday"], "opens": "12:00", "closes": "21:00" }
   ],
   "acceptsReservations": "False",
   "sameAs": [
-    "https://www.instagram.com/thecroustylab",
-    "https://www.tiktok.com/@thecroustylab"
+    "https://www.instagram.com/croustylab.geneve",
+    "https://www.tiktok.com/@croustylab.geneve"
   ],
   "hasMenu": {
     "@type": "Menu",
@@ -447,8 +435,8 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
           },
           {
             "@type": "MenuItem",
-            "name": "03 · Végétale",
-            "description": "Riz vapeur, sauce blanche végétale, tofu pané maison, oignons crispy.",
+            "name": "03 · Veggie",
+            "description": "Riz vapeur, sauce blanche végétale, tofu pané maison, oignons crispy, persil.",
             "suitableForDiet": "https://schema.org/VegetarianDiet",
             "offers": [
               { "@type": "Offer", "name": "Standard", "price": "12.00", "priceCurrency": "CHF" },
@@ -458,7 +446,7 @@ setTimeout(function(){document.documentElement.classList.add('ready')},3000);
           {
             "@type": "MenuItem",
             "name": "04 · Curry Maison",
-            "description": "Riz vapeur, sauce curry maison, poulet croustillant, oignons crispy, coriandre, citron vert.",
+            "description": "Riz vapeur, sauce curry maison, poulet croustillant, oignons crispy, persil.",
             "offers": [
               { "@type": "Offer", "name": "Standard", "price": "12.00", "priceCurrency": "CHF" },
               { "@type": "Offer", "name": "XL", "price": "17.00", "priceCurrency": "CHF" }

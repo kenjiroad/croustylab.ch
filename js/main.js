@@ -24,6 +24,7 @@
   var videos = Array.prototype.slice.call(document.querySelectorAll('video'));
   var visibles = [];
   function jouer(v) {
+    if (v.dataset.arret) return; // mis en pause par le visiteur : on ne relance pas
     v.muted = true; v.defaultMuted = true; v.playsInline = true;
     v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
     var p = v.play();
@@ -56,15 +57,29 @@
     videos.forEach(jouer);
   }
 
-  /* ---------- navigation : transparente sur le hero, noire ensuite ---------- */
+  /* ---------- accueil : affiche verticale sur téléphone, et bouton pause ---------- */
+  var heroVideo = document.querySelector('.hero-video');
+  if (heroVideo && heroVideo.dataset.posterMobile && window.matchMedia('(max-width: 767px)').matches) heroVideo.poster = heroVideo.dataset.posterMobile;
+  var pauseBtn = document.querySelector('.hero-pause');
+  if (pauseBtn && heroVideo) {
+    pauseBtn.addEventListener('click', function () {
+      var enPause = pauseBtn.getAttribute('aria-pressed') === 'true';
+      if (enPause) { delete heroVideo.dataset.arret; jouer(heroVideo); }
+      else { heroVideo.dataset.arret = '1'; heroVideo.pause(); }
+      pauseBtn.setAttribute('aria-pressed', enPause ? 'false' : 'true');
+      pauseBtn.setAttribute('aria-label', enPause ? 'Mettre la vidéo en pause' : 'Relancer la vidéo');
+    });
+  }
+
+  /* ---------- navigation : transparente sur l'accueil, barre blanche ensuite ---------- */
   var nav = document.querySelector('.nav');
   var hero = document.querySelector('.hero');
   /* Sur bureau la nav reste transparente tant que le hero est à l'écran ;
-     sur mobile elle devient noire dès qu'on quitte le haut de page, pour ne pas flotter sur le texte. */
+     sur mobile elle se pose sur du blanc dès qu'on quitte le haut de page, pour ne pas flotter sur le texte. */
   function navSeuil() { return desk.matches ? hero.offsetHeight - 100 : 40; }
   function navState() {
     if (!nav || !hero) return;
-    nav.classList.toggle('nav--top', (capture ? captureY : window.scrollY) < navSeuil());
+    nav.classList.toggle('nav--top', (capture && captureY ? captureY : window.scrollY) < navSeuil());
   }
   navState();
   window.addEventListener('scroll', navState, { passive: true });
@@ -83,30 +98,71 @@
     var wd = get('weekday').toLowerCase();
     var h = parseInt(get('hour'), 10) % 24, m = parseInt(get('minute'), 10) || 0;
     var t = h * 60 + m;
-    var weekend = /^(ven|sam)/.test(wd);
-    var close = weekend ? 24 * 60 : 22 * 60;
-    var open = t >= 11 * 60 && t < close;
-    if (el) el.textContent = open ? 'Ouvert. Le poulet est dans l’huile.' : 'Fermé. On rouvre à 11 h. Le poulet aussi.';
-    if (court) court.textContent = open ? (weekend ? 'Ouvert jusqu’à minuit' : 'Ouvert jusqu’à 22 h') : 'Fermé, rouvre à 11 h';
+    // Lundi à vendredi : 11h à 14h30 et 18h à 22h. Samedi et dimanche : 12h à 21h.
+    var jours = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
+    var idx = jours.indexOf(wd.slice(0, 3));
+    if (idx < 0) return;
+    function creneaux(i) { return i >= 5 ? [[12 * 60, 21 * 60]] : [[11 * 60, 14 * 60 + 30], [18 * 60, 22 * 60]]; }
+    function heure(min) { var hh = Math.floor(min / 60), mm = min % 60; return hh + 'h' + (mm ? String(mm).padStart(2, '0') : ''); }
+    var ouvert = null, prochain = null;
+    creneaux(idx).forEach(function (c) {
+      if (t >= c[0] && t < c[1]) ouvert = c;
+      else if (t < c[0] && !prochain) prochain = { jour: 0, debut: c[0] };
+    });
+    if (!ouvert && !prochain) prochain = { jour: 1, debut: creneaux((idx + 1) % 7)[0][0] };
+    var debut = prochain ? (prochain.debut === 12 * 60 ? 'midi' : heure(prochain.debut)) : '';
+    var quand = prochain ? (prochain.jour ? 'demain à ' : 'à ') + debut : '';
+    if (el) el.textContent = ouvert ? 'Ouvert. Le poulet est dans l’huile.' : 'Fermé. On rouvre ' + quand + '.';
+    if (court) court.textContent = ouvert ? 'Ouvert jusqu’à ' + heure(ouvert[1]) : 'Fermé, rouvre ' + quand;
   }
   etat();
   setInterval(etat, 60000);
 
   /* ---------- interactions sans animation (fonctionnent sans GSAP) ---------- */
 
-  // La carte : la photo suit la référence survolée (bureau)
+  // La carte : la photo suit la recette qu'on lit. Au survol sur ordinateur, et au défilement partout :
+  // la recette active est celle qui passe sous une ligne de lecture (milieu de l'écran sur ordinateur,
+  // milieu de l'espace laissé sous la photo collée sur téléphone).
   var refs = Array.prototype.slice.call(document.querySelectorAll('.ref'));
   var stackImgs = Array.prototype.slice.call(document.querySelectorAll('.stack-img'));
+  var stackNum = document.querySelector('[data-num]');
+  var carteSticky = document.querySelector('.carte-sticky');
+  var refActive = '01';
   function setRef(id) {
+    if (id === refActive) return;
+    refActive = id;
     refs.forEach(function (r) { r.classList.toggle('is-active', r.getAttribute('data-ref') === id); });
     stackImgs.forEach(function (i) { i.classList.toggle('is-active', i.getAttribute('data-ref') === id); });
+    if (stackNum) stackNum.textContent = id;
   }
   refs.forEach(function (r) {
-    r.addEventListener('mouseenter', function () { setRef(r.getAttribute('data-ref')); });
+    r.addEventListener('mouseenter', function () { if (desk.matches) setRef(r.getAttribute('data-ref')); });
   });
+  // Les photos de la pile se chargent dès que la carte approche, pour que le changement soit instantané.
+  if (carteSticky && 'IntersectionObserver' in window) {
+    var pre = new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) { stackImgs.forEach(function (i) { i.loading = 'eager'; }); pre.disconnect(); }
+    }, { rootMargin: '800px 0px' });
+    pre.observe(carteSticky);
+  }
+  function suivreCarte() {
+    if (!refs.length || !carteSticky) return;
+    var bas = carteSticky.getBoundingClientRect().bottom;
+    var ligne = desk.matches ? window.innerHeight * 0.5 : bas + (window.innerHeight - bas) * 0.45;
+    var choix = refs[0];
+    refs.forEach(function (r) { if (r.getBoundingClientRect().top <= ligne) choix = r; });
+    setRef(choix.getAttribute('data-ref'));
+  }
+  var attenteCarte = false;
+  window.addEventListener('scroll', function () {
+    if (!attenteCarte) { attenteCarte = true; requestAnimationFrame(function () { attenteCarte = false; suivreCarte(); }); }
+  }, { passive: true });
+  window.addEventListener('resize', suivreCarte);
+  window.addEventListener('load', suivreCarte);
 
   // XL : standard ou doublé. Le chiffre roule de 12 à 17, et de 17 à 12 au retour.
   var xlBtns = Array.prototype.slice.call(document.querySelectorAll('.xl-btn'));
+  var xlSwitch = document.querySelector('.xl-switch');
   var xlCount = document.querySelector('.xl-count');
   var xlTween = null;
   function setSize(size) {
@@ -115,6 +171,7 @@
       b.classList.toggle('is-on', on);
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    if (xlSwitch) xlSwitch.classList.toggle('xl-actif', size === 'xl');
     Array.prototype.forEach.call(document.querySelectorAll('.xl-cap, .xl-fig'), function (e) {
       e.classList.toggle('is-on', e.getAttribute('data-size') === size);
     });
@@ -122,8 +179,7 @@
     if (ok && !rm && xlCount) {
       if (xlTween) xlTween.kill();
       var o = { v: parseInt(xlCount.textContent, 10) || 12 };
-      xlTween = gsap.to(o, { v: to, duration: .5, ease: 'power2.inOut', snap: { v: 1 }, onUpdate: function () { xlCount.textContent = Math.round(o.v); }, onComplete: function () { xlCount.textContent = to; } });
-      gsap.fromTo('.xl-num', { scale: .96 }, { scale: 1, duration: .45, ease: 'back.out(3)', transformOrigin: 'left bottom' });
+      xlTween = gsap.to(o, { v: to, duration: .42, ease: 'power3.out', snap: { v: 1 }, onUpdate: function () { xlCount.textContent = Math.round(o.v); }, onComplete: function () { xlCount.textContent = to; } });
     } else if (xlCount) xlCount.textContent = to;
   }
   xlBtns.forEach(function (b) { b.addEventListener('click', function () { setSize(b.getAttribute('data-size')); }); });
@@ -139,41 +195,17 @@
   var cta = document.querySelector('.hero-cta');
   var hint = document.querySelector('.hero-hint');
 
-  // Six à huit petites miettes qui tombent du titre, une seule fois.
-  function crumbs(anchor) {
-    var box = document.querySelector('.miettes');
-    if (!box || !anchor || !hero) return;
-    var r = anchor.getBoundingClientRect(), hr = hero.getBoundingClientRect();
-    var ox = r.left - hr.left + r.width * .62, oy = r.top - hr.top + r.height * .55;
-    var n = 6 + Math.floor(Math.random() * 3);
-    for (var i = 0; i < n; i++) {
-      var d = document.createElement('span');
-      d.className = 'miette';
-      var s = 3 + Math.random() * 5;
-      d.style.width = d.style.height = s + 'px';
-      d.style.left = ox + 'px';
-      d.style.top = oy + 'px';
-      box.appendChild(d);
-      var a = (-130 + Math.random() * 170) * Math.PI / 180;
-      var dist = 40 + Math.random() * 120;
-      var dur = .9 + Math.random() * .6;
-      gsap.to(d, { x: Math.cos(a) * dist, duration: dur, ease: 'power2.out' });
-      gsap.to(d, { y: Math.sin(a) * dist * .6 + 140, duration: dur, ease: 'power1.in' });
-      gsap.to(d, { opacity: 0, rotation: 60 + Math.random() * 120, duration: dur, ease: 'power1.in', onComplete: (function (el) { return function () { el.remove(); }; })(d) });
-    }
-  }
-
   if (!rm && logo && line) {
-    gsap.set(logo, { autoAlpha: 0, scale: .9, transformOrigin: 'left center' });
+    gsap.set(logo, { autoAlpha: 0, scale: .94, transformOrigin: 'center' });
     gsap.set(line, { autoAlpha: 0, yPercent: 30 });
-    gsap.set([sub, prix, cta, hint].filter(Boolean), { autoAlpha: 0, y: 14 });
+    var pause = document.querySelector('.hero-pause');
+    gsap.set([sub, prix, cta, hint, pause].filter(Boolean), { autoAlpha: 0, y: 14 });
     html.classList.add('ready');
     gsap.timeline({ defaults: { ease: 'power3.out' }, delay: .15 })
-      .to(logo, { autoAlpha: 1, scale: 1, duration: .7, ease: 'back.out(1.4)' })
+      .to(logo, { autoAlpha: 1, scale: 1, duration: .7 })
       .to(line, { autoAlpha: 1, yPercent: 0, duration: .7 }, '-=.3')
-      .add(function () { crumbs(line); }, '-=.2')
       .to([sub, prix].filter(Boolean), { autoAlpha: 1, y: 0, duration: .55, stagger: .1 }, '-=.3')
-      .to([cta, hint].filter(Boolean), { autoAlpha: 1, y: 0, duration: .5, stagger: .1 }, '-=.3');
+      .to([cta, hint, pause].filter(Boolean), { autoAlpha: 1, y: 0, duration: .5, stagger: .1 }, '-=.3');
   } else {
     html.classList.add('ready');
   }
@@ -186,57 +218,16 @@
     gsap.to('.hero-copy', { y: 60, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   });
 
-  /* ---------- titres : ils montent d'une ligne clippée ---------- */
-  gsap.utils.toArray('.t-sec').forEach(function (t) {
-    var inner = document.createElement('span');
-    inner.className = 't-in';
-    while (t.firstChild) inner.appendChild(t.firstChild);
-    t.appendChild(inner);
-    t.classList.add('t-clip');
-    gsap.from(inner, { yPercent: 105, duration: .8, ease: 'power4.out', scrollTrigger: { trigger: t, start: 'top 88%', once: true } });
-  });
-
-  /* ---------- compteurs ---------- */
-  gsap.utils.toArray('.count').forEach(function (el) {
-    var to = parseFloat(el.getAttribute('data-to'));
-    if (isNaN(to)) return;
-    if (to === 0) return; // un zéro ne compte pas : il reste affiché tel quel
-    var o = { v: 0 };
-    gsap.to(o, {
-      v: to, duration: 1.3, ease: 'power3.out', snap: { v: 1 },
-      onStart: function () { el.textContent = '0'; },
-      onUpdate: function () { el.textContent = Math.round(o.v); },
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-    });
-  });
-
-  /* ---------- la carte : la photo suit le défilement (bureau) ---------- */
-  refs.forEach(function (r) {
-    ScrollTrigger.create({
-      trigger: r, start: 'top 55%', end: 'bottom 55%',
-      onToggle: function (s) { if (s.isActive && desk.matches) setRef(r.getAttribute('data-ref')); }
-    });
-  });
+  /* Deux moments de mouvement seulement : l'arrivée sur l'accueil, et « Crac. » qui se fend. */
 
   /* ---------- « Crac. » : le mot se fend ---------- */
   var cl = document.querySelector('.crac-l'), cr = document.querySelector('.crac-r');
   if (cl && cr) {
     gsap.timeline({ scrollTrigger: { trigger: '.crac', start: 'top 78%', once: true } })
-      .from('.crac', { scale: 1.08, transformOrigin: 'left center', duration: .32, ease: 'power4.in' })
-      .to(cl, { x: -5, y: -5, rotation: -2, duration: .6, ease: 'elastic.out(1,.45)' }, '-=.02')
-      .to(cr, { x: 8, y: 6, rotation: 1.5, duration: .6, ease: 'elastic.out(1,.45)' }, '<')
-      .from('.crac-line', { autoAlpha: 0, x: -18, duration: .5 }, '-=.35');
+      .to(cl, { y: -3, rotation: -1.2, duration: .7, ease: 'power3.out' })
+      .to(cr, { x: 3, y: 3, rotation: .8, duration: .7, ease: 'power3.out' }, '<')
+      .from('.crac-line', { autoAlpha: 0, y: 8, duration: .5, ease: 'power3.out' }, '-=.45');
   }
-
-  /* ---------- ce qu'il y a dedans : ligne par ligne ---------- */
-  var lis = document.querySelectorAll('.ingr li');
-  Array.prototype.forEach.call(lis, function (li) {
-    var s = document.createElement('span');
-    s.textContent = li.textContent;
-    li.textContent = '';
-    li.appendChild(s);
-  });
-  if (lis.length) gsap.from('.ingr li span', { yPercent: 110, duration: .7, stagger: .09, ease: 'power4.out', scrollTrigger: { trigger: '.ingr', start: 'top 85%', once: true } });
 
   /* Les images et le plan se chargent après coup : on recalcule les déclencheurs une fois la page complète. */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
